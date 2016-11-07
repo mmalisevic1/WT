@@ -1,5 +1,7 @@
 # Medina Malisevic, broj indeksa: 17113
 
+~ nesto kao news portal, samo se objavljuju pojedinacni clanci ~
+
 ***Spirala 1***
 
 - Skice su napravljene u Balsamiq Mockups, preuzeto sa stranice: https://balsamiq.com/products/mockups/ . Prikazan je i zeljeni izgleda na telefonu
