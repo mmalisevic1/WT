@@ -10,3 +10,4 @@
 
 - Files sadrzi html i css fajlove
 - Skice sadrzi trazene skice, kao i neke dodatne za daljnji rad i ako se odlucim za manje promjene stranice
+- font sadrzi font Roboto koji je importovan u svaki css
