@@ -172,6 +172,10 @@ nav ul li ul li a {
 		width: 100%;
 		border-left: 0;
 	}
+
+	.red .kolona.validacija {
+		width: 100%;
+	}
 }
 
 @media only screen and (max-width: 800px) {
@@ -285,16 +289,20 @@ nav ul li ul li a {
 }
 
 .kolona.margina{
-	width: 20%;
-}
-
-.kolona.dsadrzaj{
-	width: 39%;
-	/*border-left: 1.5px solid #66ccff;*/
+	width: 10%;
 }
 
 .kolona.lsadrzaj {
-	width: 19%;
+	width: 17%;
+}
+
+.kolona.validacija {
+	width: 25%;
+}
+
+.kolona.dsadrzaj{
+	width: 29%;
+	/*border-left: 1.5px solid #66ccff;*/
 }
 
 .zadnji {
@@ -315,4 +323,12 @@ p {
 
 form {
   margin-top: 10%;
+}
+
+#emailVal {
+	margin: 0;
+}
+
+#lozinkaVal {
+	margin: 0;
 }

@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>wtInfo</title>
+  <meta charset="utf-8" name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="clanak.css">
+  <script src="index.js"></script>
+</head>
+<header>
+  <section class="navigation">
+  <div class="nav-container">
+    <div class="brand">
+      <a href="#!" onclick="prikaziSadrzaj('clanak.html')">wtInfo</a>
+    </div>
+    <nav>
+      <div class="nav-mobile"><a id="nav-toggle" href="#!" onclick="prikaziMeni('bleh');">
+        <span></span></a></div>
+      <ul class="nav-list" id="bleh">
+        <li>
+          <div>
+            <div class="kocka vijesti"></div>
+            <a href="#!" onclick="prikaziSadrzaj('clanak.html')">Vijest</a>
+          </div>
+          <ul class="nav-dropdown">
+            <li>
+              <a href="#!">Web Design</a>
+            </li>
+            <li>
+              <a href="#!">Web Development</a>
+            </li>
+            <li>
+              <a href="#!">Graphic Design</a>
+            </li>
+          </ul>
+        </li>
+        <li>
+          <div class="kocka lifestyle"></div>
+          <a href="#!" onclick="prikaziSadrzaj('oNama.html')">O nama</a>
+        </li>
+        <li>
+          <div class="kocka magazin"></div>
+          <a href="#!" onclick="prikaziSadrzaj('kontakt.html')">Kontakt</a>
+        </li>
+        <li>
+          <div class="kocka sport"></div>
+          <a href="#!" onclick="prikaziSadrzaj('registracija.html')">Registracija</a>
+        </li>
+        <li>
+          <div class="kocka biznis"></div>
+          <a href="#!" onclick="prikaziSadrzaj('prijava.html')">Prijava</a>
+        </li>
+        <li>
+          <div>
+            <div class="kocka vise"></div>
+            <a href="#!" onclick="prikaziSadrzaj('feedback.html')">Feedback</a>
+          </div>
+
+          <ul class="nav-dropdown">
+            <li>
+              <a href="#!">Web Design</a>
+            </li>
+            <li>
+              <a href="#!">Web Development</a>
+            </li>
+            <li>
+              <a href="#!">Graphic Design</a>
+            </li>
+          </ul>
+        </li>
+      </ul>
+    </nav>
+  </div>
+</section>
+</header>
+<body onload="prikaziSadrzaj('clanak.html')">
+  <div id="polje"></div>
+</body>
+</html>
