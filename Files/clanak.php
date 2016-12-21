@@ -1,9 +1,35 @@
+<?php
+  session_start();
+
+  if(isset($_SESSION['uname'])){
+		$username = $_SESSION['uname'];
+	}
+	if(isset($_REQUEST['login'])){
+    //echo "ulazim";
+		if(isset($_REQUEST['psw'])){
+			if($_REQUEST['uname'] === "admin" && $_REQUEST['psw'] === "pass")
+			{
+				$username=$_REQUEST['uname'];
+				$_SESSION['uname']= $username;
+			}
+			else {
+				session_unset();
+        session_destroy();
+				$username="";
+			}
+		}
+
+
+	}
+?>
 <!DOCTYPE html>
 <html>
 <head>
+  <meta charset="utf-8">
   <title>wtInfo</title>
-  <meta charset="utf-8" name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="oNama.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="clanak.css">
+  <script src="clanak.js"></script>
 </head>
 <header>
   <section class="navigation">
@@ -31,7 +57,7 @@
         <li>
           <div>
             <div class="kocka vijesti"></div>
-            <a href="clanak.php">Vijest</a>
+            <a href="clanak.html">Vijest</a>
           </div>
           <ul class="nav-dropdown">
             <li>
@@ -84,15 +110,60 @@
   </div>
 </section>
 </header>
-<body>
+<body onload="showSlides(1)">
+
   <div class="red">
     <div class="kolona margina"></div>
     <div class="kolona sadrzaj">
-      <h3>Historija</h3>
-      <p>
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit. In molestie vehicula posuere. Cras in gravida orci, vel luctus risus. Fusce efficitur blandit massa, eu blandit odio aliquam sed. Nunc sit amet tortor nisl. Curabitur porta molestie aliquam. Morbi lobortis erat sit amet eros tincidunt convallis eget ac velit. Nullam aliquet nisl ipsum, dignissim tristique mi auctor sed. Pellentesque ut ipsum leo. Phasellus posuere tincidunt scelerisque. Fusce ullamcorper sem eget blandit molestie. Pellentesque ullamcorper ex eget lectus tempus luctus. Nam diam erat, malesuada id vulputate facilisis, auctor non tellus. Quisque sed ante vel ligula auctor consectetur et at elit. Suspendisse facilisis turpis sit amet tortor viverra, a posuere erat imperdiet. Duis condimentum augue ut sollicitudin facilisis. Donec eu eros faucibus sem egestas ultricies.
-      </p>
-      <h3>O stranici</h3>
+      <h3>Dokumentarac BBC-a &quot;Planet Earth&quot;</h3>
+    </div>
+    <div class="kolona margina"></div>
+  </div>
+  <div class="red">
+    <div class="kolona margina"></div>
+    <div class="kolona sadrzaj">
+
+    </div>
+    <div class="kolona margina"></div>
+  </div>
+  <div class="red">
+    <div class="kolona margina"></div>
+    <div class="kolona sadrzaj">
+      <div class="carousel-container">
+        <div class="mojeSlike fade">
+          <div class="brojText">1 / 3</div>
+          <img src="../Images/img1.jpg" style="width:100%">
+          <div class="text">From Pole to Pole</div>
+        </div>
+
+        <div class="mojeSlike fade">
+          <div class="brojText">2 / 3</div>
+          <img src="../Images/img2.jpg" style="width:100%">
+          <div class="text">Mountains</div>
+        </div>
+
+        <div class="mojeSlike fade">
+          <div class="brojText">3 / 3</div>
+          <img src="../Images/img3.jpg" style="width:100%">
+          <div class="text">Fresh Water</div>
+        </div>
+
+        <a class="prev" onclick="plusSlides(-1)">&#10094;</a>
+        <a class="next" onclick="plusSlides(1)">&#10095;</a>
+      </div>
+      <br>
+
+      <div style="text-align:center">
+        <span class="tacka" onclick="currentSlide(1)"></span>
+        <span class="tacka" onclick="currentSlide(2)"></span>
+        <span class="tacka" onclick="currentSlide(3)"></span>
+      </div>
+    </div>
+    <div class="kolona margina"></div>
+  </div>
+  <div class="red">
+    <div class="kolona margina"></div>
+    <div class="kolona sadrzaj">
       <p>
         Aenean ut vehicula nulla. Proin eu tincidunt purus. Vivamus in feugiat neque. Duis convallis orci sapien, id pretium ante consectetur vel. Vestibulum ultricies eget metus faucibus bibendum. Sed feugiat, turpis at molestie tincidunt, lorem arcu vehicula nunc, et lobortis tellus mi mattis nibh. Duis volutpat placerat ligula vitae aliquet. Nulla ut arcu dapibus, volutpat purus sit amet, tincidunt magna. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam ut felis eget dolor feugiat faucibus. Aenean malesuada mi vitae pharetra porta. Aliquam in rutrum dui. Phasellus laoreet nisi vel blandit facilisis. Praesent ac massa eget est tincidunt sollicitudin.<br>
         Integer commodo enim in massa vulputate egestas. Vestibulum consectetur arcu auctor, porttitor urna ac, viverra turpis. Mauris bibendum massa in condimentum consectetur. Mauris ac faucibus justo, ut hendrerit justo. Integer suscipit euismod sodales. Maecenas eu lobortis orci. Donec aliquam vehicula auctor. Vivamus ligula tortor, scelerisque eget nisi at, condimentum scelerisque nibh. Duis consectetur sollicitudin felis vitae finibus. Phasellus a ex id massa volutpat auctor sit amet quis nunc. Phasellus condimentum, orci et faucibus interdum, dolor nisi placerat arcu, at malesuada nunc est nec ante. Aliquam pharetra vitae tortor ut vulputate.
@@ -100,5 +171,51 @@
     </div>
     <div class="kolona margina"></div>
   </div>
+  <div class="red">
+    <div class="kolona margina"></div>
+    <div class="kolona sadrzaj">
+      <hr>
+    </div>
+    <div class="kolona margina"></div>
+  </div>
+  <div class="red">
+    <div class="kolona margina"></div>
+    <div class="kolona sadrzaj">
+      <h4>Dodajte novu vijest, izmijenite ili obrišite nešto iz postojeće (samo administrator)</h4>
+    </div>
+    <div class="kolona margina"></div>
+  </div>
+  <div class="red">
+    <div class="kolona margina"></div>
+    <div class="kolona sadrzaj">
+      <button onclick="document.getElementById('id01').style.display='block'" style="width:auto;">Admin prijava</button>
+    </div>
+    <div class="kolona margina"></div>
+  </div>
+
+
+
+  <div id="id01" class="modal">
+    <?php require('login.php');
+          if($_GET['subject'] == "logout") {
+              session_unset();
+              session_destroy();
+              $username="";
+          }
+    ?>
+  </div>
+  <?php echo session_status(); ?>
+
+<script>
+// Get the modal
+var modal = document.getElementById('id01');
+
+// When the user clicks anywhere outside of the modal, close it
+window.onclick = function(event) {
+    if (event.target == modal) {
+        modal.style.display = "none";
+    }
+}
+</script>
 </body>
 </html>

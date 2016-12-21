@@ -1,5 +1,3 @@
-
-
 function validacijaRegistracija()
 {
   var emailVal = document.getElementById('emailVal');
