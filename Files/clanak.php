@@ -66,11 +66,7 @@
     else {
       $clanakInfo = simplexml_load_file($clanakXMLfile);
     }
-<<<<<<< HEAD
 
-=======
-    
->>>>>>> origin/master
     if (isset($_POST['spasiNaslov'])) {
       //echo $_POST['unosNaslov'];
       $clanakInfo->naslov = $_POST['unosNaslov'];
@@ -78,7 +74,6 @@
       $clanakInfo->asXML($clanakXMLfile);
       //echo $promjenaXML->naslov;
     }
-<<<<<<< HEAD
 
     if (isset($_POST['spasiOpis'])) {
       //echo $_POST['unosNaslov'];
@@ -87,8 +82,6 @@
       $clanakInfo->asXML($clanakXMLfile);
       //echo $promjenaXML->naslov;
     }
-=======
->>>>>>> origin/master
 
     // logout admina
     if( isset($_GET['subject']) && isset($_SESSION['uname'])) {
