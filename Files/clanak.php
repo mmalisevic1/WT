@@ -67,6 +67,8 @@
       $clanakInfo = simplexml_load_file($clanakXMLfile);
     }
 
+
+
     if (isset($_POST['spasiNaslov'])) {
       //echo $_POST['unosNaslov'];
       $clanakInfo->naslov = $_POST['unosNaslov'];
@@ -78,6 +80,22 @@
     if (isset($_POST['spasiOpis'])) {
       //echo $_POST['unosNaslov'];
       $clanakInfo->opis = $_POST['unosOpis'];
+      //echo $promjenaXML->naslov;
+      $clanakInfo->asXML($clanakXMLfile);
+      //echo $promjenaXML->naslov;
+    }
+
+    if (isset($_POST['izbrisiNaslov'])) {
+      //echo $_POST['unosNaslov'];
+      $clanakInfo->naslov = "";
+      //echo $promjenaXML->naslov;
+      $clanakInfo->asXML($clanakXMLfile);
+      //echo $promjenaXML->naslov;
+    }
+
+    if (isset($_POST['izbrisiOpis'])) {
+      //echo $_POST['unosNaslov'];
+      $clanakInfo->opis = "";
       //echo $promjenaXML->naslov;
       $clanakInfo->asXML($clanakXMLfile);
       //echo $promjenaXML->naslov;
@@ -198,6 +216,14 @@
             $promjenaXML->asXML($clanakXMLfile);
             //echo $promjenaXML->naslov;
           }
+          if (isset($_POST['izbrisiNaslov'])) {
+            $promjenaXML = simplexml_load_file($clanakXMLfile);
+            //echo $_POST['unosNaslov'];
+            $promjenaXML->naslov = "";
+            //echo $promjenaXML->naslov;
+            $promjenaXML->asXML($clanakXMLfile);
+            //echo $promjenaXML->naslov;
+          }
         ?>
       </div>
       <div class="kolona margina">
@@ -267,6 +293,15 @@
           $promjenaXML = simplexml_load_file($clanakXMLfile);
           //echo $_POST['unosNaslov'];
           $promjenaXML->opis = $_POST['unosOpis'];
+          //echo $promjenaXML->naslov;
+          $promjenaXML->asXML($clanakXMLfile);
+          //echo $promjenaXML->naslov;
+        }
+
+        if (isset($_POST['izbrisiOpis'])) {
+          $promjenaXML = simplexml_load_file($clanakXMLfile);
+          //echo $_POST['unosNaslov'];
+          $promjenaXML->opis = "";
           //echo $promjenaXML->naslov;
           $promjenaXML->asXML($clanakXMLfile);
           //echo $promjenaXML->naslov;

@@ -1,32 +1,7 @@
 
-  <?php
-  $imeErr = $lozinkaErr = "";
-  $ime = $lozinka = "";
 
 
-
-  if ($_SERVER["REQUEST_METHOD"] == "POST") {
-
-  $ime = test_input($_POST["uname"]);
-  if (!preg_match("/^\w+$/",$ime)) {
-    $imeErr = "Korisničko ime može sadržavati samo slova, brojeve i donje crtice";
-  }
-
-  $lozinka = test_input($_POST["psw"]);
-  if (!preg_match("/(?=.*\d)(?=.*[a-z]).{6,20}/",$lozinka)) {
-    $lozinkaErr = "Lozinka mora sadržavati samo slova i brojeve, minimalna dužina 6 znakova";
-  }
-}
-
-function test_input($data) {
-  $data = trim($data);
-  $data = stripslashes($data);
-  $data = htmlspecialchars($data);
-  return $data;
-}
-  ?>
-
-  <form class="modal-content animate" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>">
+  <form class="modal-content animate" method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>">
     <div class="imgcontainer">
       <span onclick="document.getElementById('id01').style.display='none'" class="close" title="Izlaz">&times;</span>
     </div>
@@ -46,3 +21,30 @@ function test_input($data) {
       <span class="psw">Admin <a href="clanak.php?subject=logout">LOGOUT</a></span>
     </div>
   </form>
+
+  <?php
+  $imeErr = $lozinkaErr = "";
+  $ime = $lozinka = "";
+
+
+
+  if ($_SERVER["REQUEST_METHOD"] == "POST") {
+
+  $ime = test_input($_POST["uname"]);
+  if (!preg_match("/^\w+$/",$ime)) {
+    $imeErr = "Korisničko ime može sadržavati samo slova, brojeve i donje crtice";
+  }
+
+  $lozinka = test_input($_POST["psw"]);
+  if (!preg_match("/(?=.*\d)(?=.*[a-z]).{6,20}/",$lozinka)) {
+    $lozinkaErr = "Lozinka mora sadržavati samo slova i brojeve, minimalna dužina 6 znakova";
+  }
+  }
+
+  function test_input($data) {
+  $data = trim($data);
+  $data = stripslashes($data);
+  $data = htmlspecialchars($data);
+  return $data;
+  }
+  ?>
