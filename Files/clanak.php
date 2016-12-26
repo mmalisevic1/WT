@@ -67,6 +67,21 @@
       $clanakInfo = simplexml_load_file($clanakXMLfile);
     }
 
+    if (isset($_POST['spasiNaslov'])) {
+      //echo $_POST['unosNaslov'];
+      $clanakInfo->naslov = $_POST['unosNaslov'];
+      //echo $promjenaXML->naslov;
+      $clanakInfo->asXML($clanakXMLfile);
+      //echo $promjenaXML->naslov;
+    }
+
+    if (isset($_POST['spasiOpis'])) {
+      //echo $_POST['unosNaslov'];
+      $clanakInfo->opis = $_POST['unosOpis'];
+      //echo $promjenaXML->naslov;
+      $clanakInfo->asXML($clanakXMLfile);
+      //echo $promjenaXML->naslov;
+    }
 
     // logout admina
     if( isset($_GET['subject']) && isset($_SESSION['uname'])) {
@@ -242,12 +257,37 @@
   </div>
   <div class="red">
     <div class="kolona margina"></div>
+    <?php  if(isset($_SESSION['stanje']) && $_SESSION['stanje'] === "mijenjanje"):  ?>
     <div class="kolona sadrzaj">
-      <p>
-        <?php echo $clanakInfo->opis ?>
-      </p>
+      <?php
+        //echo simplexml_load_file($clanakXMLfile)->naslov;
+        $clanakInfo = simplexml_load_file($clanakXMLfile);
+        echo '<form method="post" action="'.htmlspecialchars($_SERVER["PHP_SELF"]).'"><textarea name="unosOpis" rows="4" style="width:100%">'.htmlspecialchars($clanakInfo->opis).'</textarea>';
+        if (isset($_POST['spasiOpis'])) {
+          $promjenaXML = simplexml_load_file($clanakXMLfile);
+          //echo $_POST['unosNaslov'];
+          $promjenaXML->opis = $_POST['unosOpis'];
+          //echo $promjenaXML->naslov;
+          $promjenaXML->asXML($clanakXMLfile);
+          //echo $promjenaXML->naslov;
+        }
+      ?>
+
     </div>
-    <div class="kolona margina"></div>
+    <div class="kolona margina">
+      <?php
+        echo '<input type="submit" value="Spasi" name="spasiOpis" style="width:100%;">
+        <input type="submit" value="Izbriši" name="izbrisiOpis" style="width:100%;"></form>';
+      ?>
+    </div>
+    <?php else: ?>
+      <div class="kolona sadrzaj">
+        <p>
+          <?php echo $clanakInfo->opis ?>
+        </p>
+      </div>
+      <div class="kolona margina"></div>
+    <?php endif; ?>
   </div>
   <div class="red">
     <div class="kolona margina"></div>
