@@ -1,6 +1,4 @@
 
-
-
   <form class="modal-content animate" method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>">
     <div class="imgcontainer">
       <span onclick="document.getElementById('id01').style.display='none'" class="close" title="Izlaz">&times;</span>
@@ -13,7 +11,7 @@
       <label><b>Lozinka</b></label>
       <input type="password" placeholder="pass" name="psw" required>
 
-      <button type="submit" name="login">Login</button>
+      <input type="submit" name="login" value="Login">
     </div>
 
     <div class="container" style="background-color:#f1f1f1">
@@ -28,7 +26,8 @@
 
 
 
-  if ($_SERVER["REQUEST_METHOD"] == "POST") {
+  if ($_SERVER["REQUEST_METHOD"] == "POST" && $_POST['login'] == "Login") {
+    echo "ulazim";
 
   $ime = test_input($_POST["uname"]);
   if (!preg_match("/^\w+$/",$ime)) {

@@ -272,6 +272,11 @@ h4 {
 	margin: 0 auto 0 auto;
 }
 
+h5 {
+	color: #66ccff;
+	margin: 5px auto;
+}
+
 .carousel-container {
 	max-width: 1000px;
 	position: relative;
@@ -471,4 +476,8 @@ span.psw {
     .cancelbtn {
        width: 100%;
     }
+}
+
+textarea {
+	font-family: roboto;
 }

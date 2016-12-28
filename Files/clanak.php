@@ -13,7 +13,10 @@
 		if(isset($_REQUEST['psw'])){
 			if($_REQUEST['uname'] === "admin" && $_REQUEST['psw'] === "pass")
 			{
-        session_start();
+        if (session_status() == PHP_SESSION_NONE) {
+          session_start();
+        }
+
 				$username=$_REQUEST['uname'];
 				$_SESSION['uname']= $username;
         $_SESSION['stanje'] = "mijenjanje";
@@ -96,6 +99,30 @@
     if (isset($_POST['izbrisiOpis'])) {
       //echo $_POST['unosNaslov'];
       $clanakInfo->opis = "";
+      //echo $promjenaXML->naslov;
+      $clanakInfo->asXML($clanakXMLfile);
+      //echo $promjenaXML->naslov;
+    }
+
+    if (isset($_POST['izbrisi1'])) {
+      //echo $_POST['unosNaslov'];
+      $clanakInfo->slike->slika[0] = "imgno.jpg";
+      //echo $promjenaXML->naslov;
+      $clanakInfo->asXML($clanakXMLfile);
+      //echo $promjenaXML->naslov;
+    }
+
+    if (isset($_POST['izbrisi2'])) {
+      //echo $_POST['unosNaslov'];
+      $clanakInfo->slike->slika[1] = "imgno.jpg";
+      //echo $promjenaXML->naslov;
+      $clanakInfo->asXML($clanakXMLfile);
+      //echo $promjenaXML->naslov;
+    }
+
+    if (isset($_POST['izbrisi3'])) {
+      //echo $_POST['unosNaslov'];
+      $clanakInfo->slike->slika[2] = "imgno.jpg";
       //echo $promjenaXML->naslov;
       $clanakInfo->asXML($clanakXMLfile);
       //echo $promjenaXML->naslov;
@@ -207,7 +234,7 @@
         <?php
           //echo simplexml_load_file($clanakXMLfile)->naslov;
           $clanakInfo = simplexml_load_file($clanakXMLfile);
-          echo '<form method="post" action="'.htmlspecialchars($_SERVER["PHP_SELF"]).'"><input type="text" name="unosNaslov" value="'.htmlspecialchars($clanakInfo->naslov).'">';
+          echo '<form method="post" action="'.htmlspecialchars($_SERVER["PHP_SELF"]).'"><input style="margin:0 auto" type="text" name="unosNaslov" value="'.htmlspecialchars($clanakInfo->naslov).'">';
           if (isset($_POST['spasiNaslov'])) {
             $promjenaXML = simplexml_load_file($clanakXMLfile);
             //echo $_POST['unosNaslov'];
@@ -239,6 +266,7 @@
       <div class="kolona margina"></div>
     <?php endif; ?>
   </div>
+
   <div class="red">
     <div class="kolona margina"></div>
     <div class="kolona sadrzaj">
@@ -246,7 +274,7 @@
     </div>
     <div class="kolona margina"></div>
   </div>
-  <div class="red">
+
     <div class="kolona margina"></div>
     <div class="kolona sadrzaj">
       <div class="carousel-container">
@@ -281,6 +309,48 @@
     </div>
     <div class="kolona margina"></div>
   </div>
+
+  <div class="red">
+    <div class="kolona margina"></div>
+    <?php  if(isset($_SESSION['stanje']) && $_SESSION['stanje'] === "mijenjanje"):  ?>
+      <div class="kolona sadrzaj">
+        <h5>Slika 1</h5>
+        <?php
+          echo '<form method="post" style="display:inline-block"><input type="submit" value="Izmijeni" name="izmijeni1">
+          <input type="submit" value="Izbriši" name="izbrisi1"></form>';
+          if (isset($_POST['izbrisi1'])) {
+            $promjenaXML = simplexml_load_file($clanakXMLfile);
+            $promjenaXML->slike->slika[0] = "imgno.jpg";
+            $promjenaXML->asXML($clanakXMLfile);
+          }
+        ?>
+        <h5>Slika 2</h5>
+        <?php
+          echo '<form style="display:inline-block"><input type="submit" value="Izmijeni" name="izmijeni2">
+          <input type="submit" value="Izbriši" name="izbrisi2"></form>';
+          if (isset($_POST['izbrisi2'])) {
+            $promjenaXML = simplexml_load_file($clanakXMLfile);
+            $promjenaXML->slike->slika[1] = "imgno.jpg";
+            $promjenaXML->asXML($clanakXMLfile);
+          }
+        ?>
+        <h5>Slika 3</h5>
+        <?php
+          echo '<form style="display:inline-block"><input type="submit" value="Izmijeni" name="izmijeni3">
+          <input type="submit" value="Izbriši" name="izbrisi3"></form>';
+          if (isset($_POST['izbrisi3'])) {
+            $promjenaXML = simplexml_load_file($clanakXMLfile);
+            $promjenaXML->slike->slika[2] = "imgno.jpg";
+            $promjenaXML->asXML($clanakXMLfile);
+          }
+        ?>
+      </div>
+    <?php else: ?>
+      <div class="kolona sadrzaj"></div>
+    <?php endif; ?>
+    <div class="kolona margina"></div>
+  </div>
+
   <div class="red">
     <div class="kolona margina"></div>
     <?php  if(isset($_SESSION['stanje']) && $_SESSION['stanje'] === "mijenjanje"):  ?>
