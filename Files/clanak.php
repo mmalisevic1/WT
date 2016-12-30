@@ -71,7 +71,6 @@
     }
 
 
-
     if (isset($_POST['spasiNaslov'])) {
       //echo $_POST['unosNaslov'];
       $clanakInfo->naslov = $_POST['unosNaslov'];
@@ -127,6 +126,34 @@
       $clanakInfo->asXML($clanakXMLfile);
       //echo $promjenaXML->naslov;
     }
+
+    if (isset($_POST['submit'])) {
+      if (isset($_POST['brojSlike']) && $_POST['brojSlike'] == "1") {
+        //echo "usaoGdjeTReba";
+        $clanakInfo->slike->slika[0] = $_POST['submit'];
+        $clanakInfo->asXML($clanakXMLfile);
+      }
+
+    }
+
+    if (isset($_POST['submit'])) {
+      if (isset($_POST['brojSlike']) && $_POST['brojSlike'] == "2") {
+        //echo "usaoGdjeTReba";
+        $clanakInfo->slike->slika[1] = $_POST['submit'];
+        $clanakInfo->asXML($clanakXMLfile);
+      }
+
+    }
+
+    if (isset($_POST['submit'])) {
+      if (isset($_POST['brojSlike']) && $_POST['brojSlike'] == "3") {
+        //echo "usaoGdjeTReba";
+        $clanakInfo->slike->slika[2] = $_POST['submit'];
+        $clanakInfo->asXML($clanakXMLfile);
+      }
+
+    }
+
 
     // logout admina
     if( isset($_GET['subject']) && isset($_SESSION['uname'])) {
@@ -234,6 +261,7 @@
         <?php
           //echo simplexml_load_file($clanakXMLfile)->naslov;
           $clanakInfo = simplexml_load_file($clanakXMLfile);
+
           echo '<form method="post" action="'.htmlspecialchars($_SERVER["PHP_SELF"]).'"><input style="margin:0 auto" type="text" name="unosNaslov" value="'.htmlspecialchars($clanakInfo->naslov).'">';
           if (isset($_POST['spasiNaslov'])) {
             $promjenaXML = simplexml_load_file($clanakXMLfile);
@@ -312,22 +340,46 @@
 
   <div class="red">
     <div class="kolona margina"></div>
+
     <?php  if(isset($_SESSION['stanje']) && $_SESSION['stanje'] === "mijenjanje"):  ?>
       <div class="kolona sadrzaj">
+        <div id="id02" class="modal">
+          <?php require('upload.php'); ?>
+        </div>
+        <button onclick="document.getElementById('id02').style.display='block'">Izmijeni slike</button>
         <h5>Slika 1</h5>
-        <?php
-          echo '<form method="post" style="display:inline-block"><input type="submit" value="Izmijeni" name="izmijeni1">
-          <input type="submit" value="Izbriši" name="izbrisi1"></form>';
-          if (isset($_POST['izbrisi1'])) {
-            $promjenaXML = simplexml_load_file($clanakXMLfile);
-            $promjenaXML->slike->slika[0] = "imgno.jpg";
-            $promjenaXML->asXML($clanakXMLfile);
-          }
-        ?>
+
+
+          <?php
+            echo '<form action="clanak.php" method="post" style="display:inline-block">
+            <input type="submit" value="Izbriši" name="izbrisi1"></form>';
+
+            if (isset($_POST['brojSlike']) && $_POST['brojSlike'] == "1" && isset($_REQUEST['submit'])) {
+              $promjenaXML = simplexml_load_file($clanakXMLfile);
+              $promjenaXML->slike->slika[0] = $_POST['submit'];
+              $promjenaXML->asXML($clanakXMLfile);
+            }
+
+            if (isset($_POST['izbrisi1'])) {
+              $promjenaXML = simplexml_load_file($clanakXMLfile);
+              $promjenaXML->slike->slika[0] = "imgno.jpg";
+              $promjenaXML->asXML($clanakXMLfile);
+            }
+          ?>
+
+
+
         <h5>Slika 2</h5>
         <?php
-          echo '<form style="display:inline-block"><input type="submit" value="Izmijeni" name="izmijeni2">
+          echo '<form action="clanak.php" method="post" style="display:inline-block">
           <input type="submit" value="Izbriši" name="izbrisi2"></form>';
+
+          if (isset($_POST['brojSlike']) && $_POST['brojSlike'] == "2" && isset($_REQUEST['submit'])) {
+            $promjenaXML = simplexml_load_file($clanakXMLfile);
+            $promjenaXML->slike->slika[1] = $_POST['submit'];
+            $promjenaXML->asXML($clanakXMLfile);
+          }
+
           if (isset($_POST['izbrisi2'])) {
             $promjenaXML = simplexml_load_file($clanakXMLfile);
             $promjenaXML->slike->slika[1] = "imgno.jpg";
@@ -336,8 +388,15 @@
         ?>
         <h5>Slika 3</h5>
         <?php
-          echo '<form style="display:inline-block"><input type="submit" value="Izmijeni" name="izmijeni3">
+          echo '<form action="clanak.php" method="post" style="display:inline-block">
           <input type="submit" value="Izbriši" name="izbrisi3"></form>';
+
+          if (isset($_POST['brojSlike']) && $_POST['brojSlike'] == "3" && isset($_REQUEST['submit'])) {
+            $promjenaXML = simplexml_load_file($clanakXMLfile);
+            $promjenaXML->slike->slika[2] = $_POST['submit'];
+            $promjenaXML->asXML($clanakXMLfile);
+          }
+
           if (isset($_POST['izbrisi3'])) {
             $promjenaXML = simplexml_load_file($clanakXMLfile);
             $promjenaXML->slike->slika[2] = "imgno.jpg";
@@ -427,6 +486,8 @@
   </div>
   <?php echo session_status(); ?>
 
+
+
 <script>
 // Get the modal
 var modal = document.getElementById('id01');
@@ -434,6 +495,18 @@ var modal = document.getElementById('id01');
 // When the user clicks anywhere outside of the modal, close it
 window.onclick = function(event) {
     if (event.target == modal) {
+        modal.style.display = "none";
+    }
+}
+</script>
+
+<script>
+// Get the modal
+var modal2 = document.getElementById('id02');
+
+// When the user clicks anywhere outside of the modal, close it
+window.onclick = function(event) {
+    if (event.target == modal2) {
         modal.style.display = "none";
     }
 }

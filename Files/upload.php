@@ -1,23 +1,31 @@
+<form class="modal-content animate" method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" enctype="multipart/form-data">
+  <div class="imgcontainer">
+    <span onclick="document.getElementById('id02').style.display='none'" class="close" title="Izlaz">&times;</span>
+  </div>
 
-
-
-<!DOCTYPE html>
-<html>
-<body>
-
-<form action="upload.php" method="post" enctype="multipart/form-data">
-    Select image to upload:
+  <div class="container">
+    <label><b>Odaberite sliku kojom želite zamijeniti postojeću:</b></label>
     <input type="file" name="fileToUpload" id="fileToUpload">
-    <input type="submit" value="Upload Image" name="submit">
-</form>
 
-</body>
-</html>
+    <input type="submit" value="Upload slike" name="submit"><br>
+    <label><b>Odaberite redni broj slike koju mijenjate:</b></label>
+    <input type="radio" name="brojSlike" value="1" checked>1
+    <input type="radio" name="brojSlike" value="2">2
+    <input type="radio" name="brojSlike" value="3">3
+  </div>
+  <div class="container" style="background-color:#f1f1f1">
+    <button type="button" onclick="document.getElementById('id02').style.display='none'" class="cancelbtn">Cancel</button>
+  </div>
+</form>
 
 
 <?php
 $target_dir = "../Images/";
-$target_file = $target_dir . basename($_FILES["fileToUpload"]["name"]);
+$target_file = "";
+if (isset($_FILES["fileToUpload"])) {
+  $target_file = $target_dir . basename($_FILES["fileToUpload"]["name"]);
+}
+
 $uploadOk = 1;
 $imageFileType = pathinfo($target_file,PATHINFO_EXTENSION);
 // Check if image file is a actual image or fake image
@@ -34,13 +42,17 @@ if(isset($_POST["submit"])) {
 // Check if file already exists
 if (file_exists($target_file)) {
     echo "Sorry, file already exists.";
+    $_POST['submit'] = basename( $_FILES["fileToUpload"]["name"]);
     $uploadOk = 0;
 }
 // Check file size
-if ($_FILES["fileToUpload"]["size"] > 500000) {
-    echo "Sorry, your file is too large.";
-    $uploadOk = 0;
+if (isset($_FILES["fileToUpload"])) {
+  if ($_FILES["fileToUpload"]["size"] > 900000) {
+      echo "Sorry, your file is too large.";
+      $uploadOk = 0;
+  }
 }
+
 // Allow certain file formats
 if($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg"
 && $imageFileType != "gif" ) {
@@ -54,6 +66,7 @@ if ($uploadOk == 0) {
 } else {
     if (move_uploaded_file($_FILES["fileToUpload"]["tmp_name"], $target_file)) {
         echo "The file ". basename( $_FILES["fileToUpload"]["name"]). " has been uploaded.";
+        $_POST['submit'] = basename( $_FILES["fileToUpload"]["name"]);
     } else {
         echo "Sorry, there was an error uploading your file.";
     }
