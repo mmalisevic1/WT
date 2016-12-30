@@ -15,3 +15,5 @@
 - Napravljena je pretraga na stranici Registracija
 - Stranica deployana na openshift
 - Nisam primijetila bugove, sve radi kako je i trazeno
+- Link za openshift
+-    http://spirala3-wtspirala3.44fs.preview.openshiftapps.com
