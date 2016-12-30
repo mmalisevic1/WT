@@ -340,6 +340,16 @@
 
   <div class="red">
     <div class="kolona margina"></div>
+    <div class="kolona sadrzaj">
+      <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>">
+        <input type="submit" name="preuzmiPDF" value="Generiši PDF">
+      </form>
+    </div>
+    <div class="kolona margina"></div>
+  </div>
+
+  <div class="red">
+    <div class="kolona margina"></div>
 
     <?php  if(isset($_SESSION['stanje']) && $_SESSION['stanje'] === "mijenjanje"):  ?>
       <div class="kolona sadrzaj">
@@ -485,6 +495,29 @@
     <?php require('login.php'); ?>
   </div>
   <?php echo session_status(); ?>
+
+  <?php
+    if (isset($_POST['preuzmiPDF'])) {
+      $clanakInfo = simplexml_load_file($clanakXMLfile);
+      require('fpdf.php');
+      $pdf = new FPDF();
+      $pdf->AddPage();
+      $pdf->SetFont('Arial','',16);
+      $pdf->SetTitle('WTinfo');
+      //$pdf->Write(5,$clanakInfo->naslov);
+      $pdf->Cell(0,0,$clanakInfo->naslov,0,2,'C');
+
+
+      $pdf->SetFont('Arial','',12);
+      $pdf->Image('../Images/' . $clanakInfo->slike->slika[0] .'', 5, 20, 200);
+      $pdf->Image('../Images/' . $clanakInfo->slike->slika[1] .'', 5, 150, 200);
+      $pdf->AddPage();
+      $pdf->Image('../Images/' . $clanakInfo->slike->slika[2] .'', 5, 10, 200);
+      $pdf->Cell(0,130,"",0,2,'C');
+      $pdf->MultiCell(0,5,$clanakInfo->opis,0,'L');
+      $pdf->Output('F', 'Clanak.pdf');
+    }
+  ?>
 
 
 
