@@ -23,8 +23,8 @@
 
 			}
 			else {
-				session_unset();
-        session_destroy();
+				//session_unset();
+        //session_destroy();
 				$username="";
 			}
 		}
@@ -223,7 +223,7 @@
         </li>
         <li>
           <div class="kocka sport"></div>
-          <a href="registracija.html">Registracija</a>
+          <a href="registracija.php">Registracija</a>
         </li>
         <li>
           <div class="kocka biznis"></div>
@@ -309,19 +309,19 @@
         <div class="mojeSlike fade">
           <div class="brojText">1 / 3</div>
           <?php echo "<img src='../Images/" . $clanakInfo->slike->slika[0] ."' style='width:100%' >" ?>
-          <div class="text">From Pole to Pole</div>
+
         </div>
 
         <div class="mojeSlike fade">
           <div class="brojText">2 / 3</div>
           <?php echo "<img src='../Images/" . $clanakInfo->slike->slika[1] ."' style='width:100%' >" ?>
-          <div class="text">Mountains</div>
+
         </div>
 
         <div class="mojeSlike fade">
           <div class="brojText">3 / 3</div>
           <?php echo "<img src='../Images/" . $clanakInfo->slike->slika[2] ."' style='width:100%' >" ?>
-          <div class="text">Fresh Water</div>
+
         </div>
 
         <a class="prev" onclick="plusSlides(-1)">&#10094;</a>

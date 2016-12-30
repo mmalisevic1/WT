@@ -2,14 +2,16 @@
 
 ~ nesto kao news portal, samo se objavljuju pojedinacni clanci ~
 
-***Spirala 1***
+***Spirala 3***
 
-- Skice su napravljene u Balsamiq Mockups, preuzeto sa stranice: https://balsamiq.com/products/mockups/ . Prikazan je i zeljeni izgleda na telefonu
-- Responzivnost postignuta metodom gridView, radjeno kao u primjeru objavljenom na c2
-- Media query za ekrane preko 800px i ispod 800px
-- Meni je tzv. hamburger meni, koji je u sirini ispod 800px, zapravo dropdown meni
-- Implementirane sve tri forme
-
-- Files sadrzi html i css fajlove
-- Skice sadrzi trazene skice, kao i neke dodatne za daljnji rad i ako se odlucim za manje promjene stranice
-- font sadrzi font Roboto koji je importovan u svaki css
+- clanak.php je pocetna stranica
+- serijalizira se citav clanak, kao i korisnicko ime i spol na podsrtranici Registracija( ovo je za potrebe zadataka 2 i 4)
+- Kada admin mijenja slike na carousel se ne vidi odmah ta promjena vec pri log outu ili pri nekoj drugoj promjeni
+- Prethodna stavka nije pravi bug jer se promjena izvrsi, adminu je to jasno, xml fajl se zaista promijeni
+- adminovi podaci su zapisani u admin.xml
+- Na stranici Registracija admin moze preuzeti CSV fajl
+- Na stranici clanak svi korisnici mogu generisati PDF izvjestaj
+- Posto nije naglaseno PDF se ne downloaduje, vec se samo u Files folderu kreira trazeni pdf
+- Napravljena je pretraga na stranici Registracija
+- Stranica deployana na openshift
+- Nisam primijetila bugove, sve radi kako je i trazeno
