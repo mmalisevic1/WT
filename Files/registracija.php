@@ -67,7 +67,7 @@
   <section class="navigation">
   <div class="nav-container">
     <div class="brand">
-      <a href="clanak.php">wtInfo</a>
+      <a href="index.php">wtInfo</a>
     </div>
     <nav>
       <div class="nav-mobile"><a id="nav-toggle" href="#!" onclick="prikaziMeni('bleh');">
@@ -89,7 +89,7 @@
         <li>
           <div>
             <div class="kocka vijesti"></div>
-            <a href="clanak.php">Vijest</a>
+            <a href="index.php">Vijest</a>
           </div>
           <ul class="nav-dropdown">
             <li>

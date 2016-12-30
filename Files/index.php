@@ -177,7 +177,7 @@
   <section class="navigation">
   <div class="nav-container">
     <div class="brand">
-      <a href="clanak.php">wtInfo</a>
+      <a href="index.php">wtInfo</a>
     </div>
     <nav>
       <div class="nav-mobile"><a id="nav-toggle" href="#!" onclick="prikaziMeni('bleh');">
@@ -199,7 +199,7 @@
         <li>
           <div>
             <div class="kocka vijesti"></div>
-            <a href="clanak.php">Vijest</a>
+            <a href="index.php">Vijest</a>
           </div>
           <ul class="nav-dropdown">
             <li>
@@ -361,7 +361,7 @@
 
 
           <?php
-            echo '<form action="clanak.php" method="post" style="display:inline-block">
+            echo '<form action="index.php" method="post" style="display:inline-block">
             <input type="submit" value="Izbriši" name="izbrisi1"></form>';
 
             if (isset($_POST['brojSlike']) && $_POST['brojSlike'] == "1" && isset($_REQUEST['submit'])) {
@@ -381,7 +381,7 @@
 
         <h5>Slika 2</h5>
         <?php
-          echo '<form action="clanak.php" method="post" style="display:inline-block">
+          echo '<form action="index.php" method="post" style="display:inline-block">
           <input type="submit" value="Izbriši" name="izbrisi2"></form>';
 
           if (isset($_POST['brojSlike']) && $_POST['brojSlike'] == "2" && isset($_REQUEST['submit'])) {
@@ -398,7 +398,7 @@
         ?>
         <h5>Slika 3</h5>
         <?php
-          echo '<form action="clanak.php" method="post" style="display:inline-block">
+          echo '<form action="index.php" method="post" style="display:inline-block">
           <input type="submit" value="Izbriši" name="izbrisi3"></form>';
 
           if (isset($_POST['brojSlike']) && $_POST['brojSlike'] == "3" && isset($_REQUEST['submit'])) {
