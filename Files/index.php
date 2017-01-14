@@ -31,24 +31,46 @@
 
 	}
 
+  // IZMJENE 4
   // xml fajl koji sadrzi username i password admina
-  $adminXMLfile = "admin.xml";
+  /*$adminXMLfile = "admin.xml";
   $postoji = file_exists($adminXMLfile);
   if($postoji == FALSE){
      $adminInfo = new SimpleXMLElement("<?xml version=\"1.0\" encoding=\"utf-8\" ?><Admin></Admin>");
      $adminInfo->addChild('username',"admin");
      $adminInfo->addChild('password',"pass");
      $adminInfo->asXML($adminXMLfile);
-     //echo "kreira se file";
-     // bas mi je super sto simpleXML nema mogucnost formatiranja :(((
    }
    else {
      $adminInfo = simplexml_load_file($adminXMLfile);
+   }*/
+
+   try {
+     $conn = new PDO("mysql:host=localhost;dbname=wtspirala4", "admin", "pass");
+     // set the PDO error mode to exception
+     $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+     $conn->exec("set names utf8");
+
+     $upit = $conn->query("SELECT COUNT(*) FROM `administracija`");
+     $kolona = $upit->fetchColumn();
+     if ($kolona == 0) {
+       $rezultat = $conn->query("INSERT INTO `administracija` (`username`, `password`) VALUES ('admin', 'pass');");
+       if (!$rezultat) {
+         $greska = $veza->errorInfo();
+         print $greska;
+         exit();
+       }
+     }
+   }
+   catch(PDOException $e)
+   {
+       echo "Konekcija nije uspjela: " . $e->getMessage();
    }
 
+   // IZMJENE 4
    // XML fajl koji sadrzi sve sto treba za prvi zadatak (tuga golema)
    // to je znaci XML verzija mog clanka koji se treba serijlizirati
-   $clanakXMLfile = "clanak.xml";
+   /*$clanakXMLfile = "clanak.xml";
    $postoji = file_exists($clanakXMLfile);
    if($postoji == FALSE){
       $clanakInfo = new SimpleXMLElement("<?xml version=\"1.0\" encoding=\"utf-8\" ?><Clanak>
@@ -64,22 +86,73 @@
   </opis>
 </Clanak>");
       $clanakInfo->asXML($clanakXMLfile);
-      //echo "kreira se file";
     }
     else {
       $clanakInfo = simplexml_load_file($clanakXMLfile);
+    }*/
+
+    try {
+      $conn = new PDO("mysql:host=localhost;dbname=wtspirala4", "admin", "pass");
+      // set the PDO error mode to exception
+      $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+      $conn->exec("set names utf8");
+
+      $upit = $conn->query("SELECT COUNT(*) FROM `clanak`");
+      $kolona = $upit->fetchColumn();
+      if ($kolona == 0) {
+        $nasl = 'Dokumentarac BBC-a \"Planet Earth\"';
+        $sl1 = 'img1.jpg';
+        $sl2 = 'img2.jpg';
+        $sl3 = 'img3.jpg';
+        $txt = 'Aenean ut vehicula nulla. Proin eu tincidunt purus. Vivamus in feugiat neque. Duis convallis orci sapien, id pretium ante consectetur vel. Vestibulum ultricies eget metus faucibus bibendum. Sed feugiat, turpis at molestie tincidunt, lorem arcu vehicula nunc, et lobortis tellus mi mattis nibh. Duis volutpat placerat ligula vitae aliquet. Nulla ut arcu dapibus, volutpat purus sit amet, tincidunt magna. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam ut felis eget dolor feugiat faucibus. Aenean malesuada mi vitae pharetra porta. Aliquam in rutrum dui. Phasellus laoreet nisi vel blandit facilisis. Praesent ac massa eget est tincidunt sollicitudin.
+        Integer commodo enim in massa vulputate egestas. Vestibulum consectetur arcu auctor, porttitor urna ac, viverra turpis. Mauris bibendum massa in condimentum consectetur. Mauris ac faucibus justo, ut hendrerit justo. Integer suscipit euismod sodales. Maecenas eu lobortis orci. Donec aliquam vehicula auctor. Vivamus ligula tortor, scelerisque eget nisi at, condimentum scelerisque nibh. Duis consectetur sollicitudin felis vitae finibus. Phasellus a ex id massa volutpat auctor sit amet quis nunc. Phasellus condimentum, orci et faucibus interdum, dolor nisi placerat arcu, at malesuada nunc est nec ante. Aliquam pharetra vitae tortor ut vulputate.';
+        $dt = date("Y-m-d h:i:s");
+        $rezultat = $conn->query("INSERT INTO `clanak` (`id`, `naslov`, `slika1`, `slika2`, `slika3`, `tekst`, `vrijeme`) VALUES (NULL, '$nasl', '$sl1', '$sl2', '$sl3', '$txt', '$dt');");
+        if (!$rezultat) {
+          $greska = $veza->errorInfo();
+          print $greska;
+          exit();
+        }
+      }
+    }
+    catch(PDOException $e)
+    {
+        echo "Konekcija nije uspjela: " . $e->getMessage();
     }
 
 
-    if (isset($_POST['spasiNaslov'])) {
+    /*if (isset($_POST['spasiNaslov'])) {
       //echo $_POST['unosNaslov'];
       $clanakInfo->naslov = $_POST['unosNaslov'];
       //echo $promjenaXML->naslov;
       $clanakInfo->asXML($clanakXMLfile);
       //echo $promjenaXML->naslov;
-    }
+    }*/
 
-    if (isset($_POST['spasiOpis'])) {
+    /*if (isset($_POST['spasiNaslov'])) {
+      try {
+        $conn = new PDO("mysql:host=localhost;dbname=wtspirala4", "admin", "pass");
+        // set the PDO error mode to exception
+        $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        $conn->exec("set names utf8");
+
+        $stmt = $conn->prepare("SELECT * FROM clanak ORDER BY id DESC LIMIT 1");
+        $stmt->execute();
+        $rjesenje = $stmt->fetch(PDO::FETCH_ASSOC);
+        $broj = $rjesenje['id'] + 1;
+        //echo $broj;
+        $sql = "UPDATE clanak SET naslov='".$_POST['unosNaslov']."' WHERE id=".$broj."";
+        $stmt = $conn->prepare($sql);
+        $stmt->execute();
+      }
+      catch(PDOException $e)
+      {
+          echo "Konekcija nije uspjela: " . $e->getMessage();
+      }
+    }*/
+
+
+    /*if (isset($_POST['spasiOpis'])) {
       //echo $_POST['unosNaslov'];
       $clanakInfo->opis = $_POST['unosOpis'];
       //echo $promjenaXML->naslov;
@@ -152,7 +225,7 @@
         $clanakInfo->asXML($clanakXMLfile);
       }
 
-    }
+    }*/
 
 
     // logout admina
@@ -227,12 +300,12 @@
         </li>
         <li>
           <div class="kocka biznis"></div>
-          <a href="prijava.html">Prijava</a>
+          <a href="prijava.php">Prijava</a>
         </li>
         <li>
           <div>
             <div class="kocka vise"></div>
-            <a href="feedback.html">Feedback</a>
+            <a href="feedback.php">Feedback</a>
           </div>
 
           <ul class="nav-dropdown">
@@ -260,24 +333,87 @@
       <div class="kolona sadrzaj">
         <?php
           //echo simplexml_load_file($clanakXMLfile)->naslov;
-          $clanakInfo = simplexml_load_file($clanakXMLfile);
+          //$clanakInfo = simplexml_load_file($clanakXMLfile);
 
-          echo '<form method="post" action="'.htmlspecialchars($_SERVER["PHP_SELF"]).'"><input style="margin:0 auto" type="text" name="unosNaslov" value="'.htmlspecialchars($clanakInfo->naslov).'">';
-          if (isset($_POST['spasiNaslov'])) {
-            $promjenaXML = simplexml_load_file($clanakXMLfile);
-            //echo $_POST['unosNaslov'];
-            $promjenaXML->naslov = $_POST['unosNaslov'];
-            //echo $promjenaXML->naslov;
-            $promjenaXML->asXML($clanakXMLfile);
-            //echo $promjenaXML->naslov;
+          try {
+            $conn = new PDO("mysql:host=localhost;dbname=wtspirala4", "admin", "pass");
+            // set the PDO error mode to exception
+            $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            $conn->exec("set names utf8");
+
+            $stmt = $conn->prepare("SELECT naslov FROM clanak ORDER BY id DESC LIMIT 1");
+            $stmt->execute();
+            foreach ($stmt->fetch() as $naslov) {
+              //echo $naslov;
+              echo '<form method="post" action="'.htmlspecialchars($_SERVER["PHP_SELF"]).'"><input style="margin:0 auto" type="text" name="unosNaslov" value="'.htmlspecialchars($naslov).'">';
+              break;
+            }
+
+            if (isset($_POST['spasiNaslov'])) {
+              /*$promjenaXML = simplexml_load_file($clanakXMLfile);
+              //echo $_POST['unosNaslov'];
+              $promjenaXML->naslov = $_POST['unosNaslov'];
+              //echo $promjenaXML->naslov;
+              $promjenaXML->asXML($clanakXMLfile);
+              //echo $promjenaXML->naslov;*/
+
+              $conn = new PDO("mysql:host=localhost;dbname=wtspirala4", "admin", "pass");
+              // set the PDO error mode to exception
+              $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+              $conn->exec("set names utf8");
+
+              $stmt = $conn->prepare("SELECT * FROM clanak ORDER BY id DESC LIMIT 1");
+              $stmt->execute();
+              $rjesenje = $stmt->fetch(PDO::FETCH_ASSOC);
+
+              $stmt = $conn->prepare("INSERT INTO clanak (naslov, slika1, slika2, slika3, tekst, vrijeme) VALUES (:naslov, :slika1, :slika2, :slika3, :tekst, :vrijeme)");
+              $stmt->bindParam(':naslov', $naslov);
+              $stmt->bindParam(':slika1', $rjesenje['slika1']);
+              $stmt->bindParam(':slika2', $rjesenje['slika2']);
+              $stmt->bindParam(':slika3', $rjesenje['slika3']);
+              $stmt->bindParam(':tekst', $rjesenje['tekst']);
+              $stmt->bindParam(':vrijeme', $vr);
+
+              // insert a row
+              $naslov = $_POST['unosNaslov'];
+              $vr = date("Y-m-d h:i:s");
+              $stmt->execute();
+            }
+
+            if (isset($_POST['izbrisiNaslov'])) {
+              /*$promjenaXML = simplexml_load_file($clanakXMLfile);
+              //echo $_POST['unosNaslov'];
+              $promjenaXML->naslov = "";
+              //echo $promjenaXML->naslov;
+              $promjenaXML->asXML($clanakXMLfile);
+              //echo $promjenaXML->naslov;*/
+              $conn = new PDO("mysql:host=localhost;dbname=wtspirala4", "admin", "pass");
+              // set the PDO error mode to exception
+              $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+              $conn->exec("set names utf8");
+
+              $stmt = $conn->prepare("SELECT * FROM clanak ORDER BY id DESC LIMIT 1");
+              $stmt->execute();
+              $rjesenje = $stmt->fetch(PDO::FETCH_ASSOC);
+
+              $stmt = $conn->prepare("INSERT INTO clanak (naslov, slika1, slika2, slika3, tekst, vrijeme) VALUES (:naslov, :slika1, :slika2, :slika3, :tekst, :vrijeme)");
+              $stmt->bindParam(':naslov', $naslov);
+              $stmt->bindParam(':slika1', $rjesenje['slika1']);
+              $stmt->bindParam(':slika2', $rjesenje['slika2']);
+              $stmt->bindParam(':slika3', $rjesenje['slika3']);
+              $stmt->bindParam(':tekst', $rjesenje['tekst']);
+              $stmt->bindParam(':vrijeme', $vr);
+
+              // insert a row
+              $naslov = "";
+              $vr = date("Y-m-d h:i:s");
+              $stmt->execute();
+            }
+
           }
-          if (isset($_POST['izbrisiNaslov'])) {
-            $promjenaXML = simplexml_load_file($clanakXMLfile);
-            //echo $_POST['unosNaslov'];
-            $promjenaXML->naslov = "";
-            //echo $promjenaXML->naslov;
-            $promjenaXML->asXML($clanakXMLfile);
-            //echo $promjenaXML->naslov;
+          catch(PDOException $e)
+          {
+              echo "Konekcija nije uspjela: " . $e->getMessage();
           }
         ?>
       </div>
@@ -288,13 +424,33 @@
           ?>
       </div>
     <?php else: ?>
-      <div class="kolona sadrzaj">
-        <h3><?php echo $clanakInfo->naslov ?></h3>
-      </div>
-      <div class="kolona margina"></div>
+    <div class="kolona sadrzaj">
+      <h3>
+        <?php
+          try {
+            $conn = new PDO("mysql:host=localhost;dbname=wtspirala4", "admin", "pass");
+            // set the PDO error mode to exception
+            $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            $conn->exec("set names utf8");
+
+            $stmt = $conn->prepare("SELECT naslov FROM clanak ORDER BY id DESC LIMIT 1");
+            $stmt->execute();
+            foreach ($stmt->fetch() as $naslov) {
+            //echo $naslov;
+            echo htmlspecialchars($naslov);
+            break;
+            }
+          }
+          catch(PDOException $e)
+          {
+              echo "Konekcija nije uspjela: " . $e->getMessage();
+          }
+        ?>
+      </h3>
+    </div>
+    <div class="kolona margina"></div>
     <?php endif; ?>
   </div>
-
   <div class="red">
     <div class="kolona margina"></div>
     <div class="kolona sadrzaj">
@@ -302,26 +458,94 @@
     </div>
     <div class="kolona margina"></div>
   </div>
+  <div class="red">
 
-    <div class="kolona margina"></div>
+  <div class="kolona margina"></div>
     <div class="kolona sadrzaj">
       <div class="carousel-container">
         <div class="mojeSlike fade">
           <div class="brojText">1 / 3</div>
-          <?php echo "<img src='../Images/" . $clanakInfo->slike->slika[0] ."' style='width:100%' >" ?>
+          <?php
+          $sl1 = "";
+          try {
+            $conn = new PDO("mysql:host=localhost;dbname=wtspirala4", "admin", "pass");
+            // set the PDO error mode to exception
+            $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            $conn->exec("set names utf8");
+
+            $stmt = $conn->prepare("SELECT slika1 FROM clanak ORDER BY id DESC LIMIT 1");
+            $stmt->execute();
+            foreach ($stmt->fetch() as $slika1) {
+            //echo $naslov;
+            $sl1 =  $slika1;
+            break;
+            }
+          }
+          catch(PDOException $e)
+          {
+              echo "Konekcija nije uspjela: " . $e->getMessage();
+          }
+            echo "<img src='../Images/" .
+            $sl1
+            ."' style='width:100%' >"
+          ?>
 
         </div>
 
         <div class="mojeSlike fade">
           <div class="brojText">2 / 3</div>
-          <?php echo "<img src='../Images/" . $clanakInfo->slike->slika[1] ."' style='width:100%' >" ?>
+          <?php
+          $sl2 = "";
+          try {
+            $conn = new PDO("mysql:host=localhost;dbname=wtspirala4", "admin", "pass");
+            // set the PDO error mode to exception
+            $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            $conn->exec("set names utf8");
 
+            $stmt = $conn->prepare("SELECT slika2 FROM clanak ORDER BY id DESC LIMIT 1");
+            $stmt->execute();
+            foreach ($stmt->fetch() as $slika2) {
+            //echo $naslov;
+            $sl2 =  $slika2;
+            break;
+            }
+          }
+          catch(PDOException $e)
+          {
+              echo "Konekcija nije uspjela: " . $e->getMessage();
+          }
+            echo "<img src='../Images/" .
+            $sl2
+            ."' style='width:100%' >"
+          ?>
         </div>
 
         <div class="mojeSlike fade">
           <div class="brojText">3 / 3</div>
-          <?php echo "<img src='../Images/" . $clanakInfo->slike->slika[2] ."' style='width:100%' >" ?>
+          <?php
+          $sl3 = "";
+          try {
+            $conn = new PDO("mysql:host=localhost;dbname=wtspirala4", "admin", "pass");
+            // set the PDO error mode to exception
+            $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            $conn->exec("set names utf8");
 
+            $stmt = $conn->prepare("SELECT slika3 FROM clanak ORDER BY id DESC LIMIT 1");
+            $stmt->execute();
+            foreach ($stmt->fetch() as $slika3) {
+            //echo $naslov;
+            $sl3 =  $slika3;
+            break;
+            }
+          }
+          catch(PDOException $e)
+          {
+              echo "Konekcija nije uspjela: " . $e->getMessage();
+          }
+            echo "<img src='../Images/" .
+            $sl3
+            ."' style='width:100%' >"
+          ?>
         </div>
 
         <a class="prev" onclick="plusSlides(-1)">&#10094;</a>
@@ -337,17 +561,6 @@
     </div>
     <div class="kolona margina"></div>
   </div>
-
-  <div class="red">
-    <div class="kolona margina"></div>
-    <div class="kolona sadrzaj">
-      <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>">
-        <input type="submit" name="preuzmiPDF" value="Generiši PDF">
-      </form>
-    </div>
-    <div class="kolona margina"></div>
-  </div>
-
   <div class="red">
     <div class="kolona margina"></div>
 
@@ -365,35 +578,144 @@
             <input type="submit" value="Izbriši" name="izbrisi1"></form>';
 
             if (isset($_POST['brojSlike']) && $_POST['brojSlike'] == "1" && isset($_REQUEST['submit'])) {
-              $promjenaXML = simplexml_load_file($clanakXMLfile);
+              /*$promjenaXML = simplexml_load_file($clanakXMLfile);
               $promjenaXML->slike->slika[0] = $_POST['submit'];
-              $promjenaXML->asXML($clanakXMLfile);
+              $promjenaXML->asXML($clanakXMLfile);*/
+
+              try {
+                $conn = new PDO("mysql:host=localhost;dbname=wtspirala4", "admin", "pass");
+                // set the PDO error mode to exception
+                $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+                $conn->exec("set names utf8");
+
+                $stmt = $conn->prepare("SELECT * FROM clanak ORDER BY id DESC LIMIT 1");
+                $stmt->execute();
+                $rjesenje = $stmt->fetch(PDO::FETCH_ASSOC);
+
+                $stmt = $conn->prepare("INSERT INTO clanak (naslov, slika1, slika2, slika3, tekst, vrijeme) VALUES (:naslov, :slika1, :slika2, :slika3, :tekst, :vrijeme)");
+                $stmt->bindParam(':naslov', $rjesenje['naslov']);
+                $stmt->bindParam(':slika1', $sl1);
+                $stmt->bindParam(':slika2', $rjesenje['slika2']);
+                $stmt->bindParam(':slika3', $rjesenje['slika3']);
+                $stmt->bindParam(':tekst', $rjesenje['tekst']);
+                $stmt->bindParam(':vrijeme', $vr);
+
+                // insert a row
+                $sl1 = $_POST['submit'];
+                $vr = date("Y-m-d h:i:s");
+                $stmt->execute();
+              }
+              catch(PDOException $e)
+              {
+                  echo "Konekcija nije uspjela: " . $e->getMessage();
+              }
             }
 
             if (isset($_POST['izbrisi1'])) {
-              $promjenaXML = simplexml_load_file($clanakXMLfile);
+              /*$promjenaXML = simplexml_load_file($clanakXMLfile);
               $promjenaXML->slike->slika[0] = "imgno.jpg";
-              $promjenaXML->asXML($clanakXMLfile);
+              $promjenaXML->asXML($clanakXMLfile);*/
+
+              try {
+                $conn = new PDO("mysql:host=localhost;dbname=wtspirala4", "admin", "pass");
+                // set the PDO error mode to exception
+                $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+                $conn->exec("set names utf8");
+
+                $stmt = $conn->prepare("SELECT * FROM clanak ORDER BY id DESC LIMIT 1");
+                $stmt->execute();
+                $rjesenje = $stmt->fetch(PDO::FETCH_ASSOC);
+
+                $stmt = $conn->prepare("INSERT INTO clanak (naslov, slika1, slika2, slika3, tekst, vrijeme) VALUES (:naslov, :slika1, :slika2, :slika3, :tekst, :vrijeme)");
+                $stmt->bindParam(':naslov', $rjesenje['naslov']);
+                $stmt->bindParam(':slika1', $sl1);
+                $stmt->bindParam(':slika2', $rjesenje['slika2']);
+                $stmt->bindParam(':slika3', $rjesenje['slika3']);
+                $stmt->bindParam(':tekst', $rjesenje['tekst']);
+                $stmt->bindParam(':vrijeme', $vr);
+
+                // insert a row
+                $sl1 = "imgno.jpg";
+                $vr = date("Y-m-d h:i:s");
+                $stmt->execute();
+              }
+              catch(PDOException $e)
+              {
+                  echo "Konekcija nije uspjela: " . $e->getMessage();
+              }
             }
           ?>
-
-
-
-        <h5>Slika 2</h5>
+          <h5>Slika 2</h5>
         <?php
           echo '<form action="index.php" method="post" style="display:inline-block">
           <input type="submit" value="Izbriši" name="izbrisi2"></form>';
 
           if (isset($_POST['brojSlike']) && $_POST['brojSlike'] == "2" && isset($_REQUEST['submit'])) {
-            $promjenaXML = simplexml_load_file($clanakXMLfile);
+            /*$promjenaXML = simplexml_load_file($clanakXMLfile);
             $promjenaXML->slike->slika[1] = $_POST['submit'];
-            $promjenaXML->asXML($clanakXMLfile);
+            $promjenaXML->asXML($clanakXMLfile);*/
+
+            try {
+              $conn = new PDO("mysql:host=localhost;dbname=wtspirala4", "admin", "pass");
+              // set the PDO error mode to exception
+              $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+              $conn->exec("set names utf8");
+
+              $stmt = $conn->prepare("SELECT * FROM clanak ORDER BY id DESC LIMIT 1");
+              $stmt->execute();
+              $rjesenje = $stmt->fetch(PDO::FETCH_ASSOC);
+
+              $stmt = $conn->prepare("INSERT INTO clanak (naslov, slika1, slika2, slika3, tekst, vrijeme) VALUES (:naslov, :slika1, :slika2, :slika3, :tekst, :vrijeme)");
+              $stmt->bindParam(':naslov', $rjesenje['naslov']);
+              $stmt->bindParam(':slika1', $rjesenje['slika1']);
+              $stmt->bindParam(':slika2', $sl2);
+              $stmt->bindParam(':slika3', $rjesenje['slika3']);
+              $stmt->bindParam(':tekst', $rjesenje['tekst']);
+              $stmt->bindParam(':vrijeme', $vr);
+
+              // insert a row
+              $sl2 = $_POST['submit'];
+              $vr = date("Y-m-d h:i:s");
+              $stmt->execute();
+            }
+            catch(PDOException $e)
+            {
+                echo "Konekcija nije uspjela: " . $e->getMessage();
+            }
           }
 
           if (isset($_POST['izbrisi2'])) {
-            $promjenaXML = simplexml_load_file($clanakXMLfile);
+            /*$promjenaXML = simplexml_load_file($clanakXMLfile);
             $promjenaXML->slike->slika[1] = "imgno.jpg";
-            $promjenaXML->asXML($clanakXMLfile);
+            $promjenaXML->asXML($clanakXMLfile);*/
+
+            try {
+              $conn = new PDO("mysql:host=localhost;dbname=wtspirala4", "admin", "pass");
+              // set the PDO error mode to exception
+              $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+              $conn->exec("set names utf8");
+
+              $stmt = $conn->prepare("SELECT * FROM clanak ORDER BY id DESC LIMIT 1");
+              $stmt->execute();
+              $rjesenje = $stmt->fetch(PDO::FETCH_ASSOC);
+
+              $stmt = $conn->prepare("INSERT INTO clanak (naslov, slika1, slika2, slika3, tekst, vrijeme) VALUES (:naslov, :slika1, :slika2, :slika3, :tekst, :vrijeme)");
+              $stmt->bindParam(':naslov', $rjesenje['naslov']);
+              $stmt->bindParam(':slika1', $rjesenje['slika1']);
+              $stmt->bindParam(':slika2', $sl2);
+              $stmt->bindParam(':slika3', $rjesenje['slika3']);
+              $stmt->bindParam(':tekst', $rjesenje['tekst']);
+              $stmt->bindParam(':vrijeme', $vr);
+
+              // insert a row
+              $sl1 = "imgno.jpg";
+              $vr = date("Y-m-d h:i:s");
+              $stmt->execute();
+            }
+            catch(PDOException $e)
+            {
+                echo "Konekcija nije uspjela: " . $e->getMessage();
+            }
           }
         ?>
         <h5>Slika 3</h5>
@@ -402,48 +724,149 @@
           <input type="submit" value="Izbriši" name="izbrisi3"></form>';
 
           if (isset($_POST['brojSlike']) && $_POST['brojSlike'] == "3" && isset($_REQUEST['submit'])) {
-            $promjenaXML = simplexml_load_file($clanakXMLfile);
+            /*$promjenaXML = simplexml_load_file($clanakXMLfile);
             $promjenaXML->slike->slika[2] = $_POST['submit'];
-            $promjenaXML->asXML($clanakXMLfile);
+            $promjenaXML->asXML($clanakXMLfile);*/
+
+            try {
+              $conn = new PDO("mysql:host=localhost;dbname=wtspirala4", "admin", "pass");
+              // set the PDO error mode to exception
+              $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+              $conn->exec("set names utf8");
+
+              $stmt = $conn->prepare("SELECT * FROM clanak ORDER BY id DESC LIMIT 1");
+              $stmt->execute();
+              $rjesenje = $stmt->fetch(PDO::FETCH_ASSOC);
+
+              $stmt = $conn->prepare("INSERT INTO clanak (naslov, slika1, slika2, slika3, tekst, vrijeme) VALUES (:naslov, :slika1, :slika2, :slika3, :tekst, :vrijeme)");
+              $stmt->bindParam(':naslov', $rjesenje['naslov']);
+              $stmt->bindParam(':slika1', $rjesenje['slika1']);
+              $stmt->bindParam(':slika2', $rjesenje['slika2']);
+              $stmt->bindParam(':slika3', $sl3);
+              $stmt->bindParam(':tekst', $rjesenje['tekst']);
+              $stmt->bindParam(':vrijeme', $vr);
+
+              // insert a row
+              $sl3 = $_POST['submit'];
+              $vr = date("Y-m-d h:i:s");
+              $stmt->execute();
+            }
+            catch(PDOException $e)
+            {
+                echo "Konekcija nije uspjela: " . $e->getMessage();
+            }
           }
 
           if (isset($_POST['izbrisi3'])) {
-            $promjenaXML = simplexml_load_file($clanakXMLfile);
+            /*$promjenaXML = simplexml_load_file($clanakXMLfile);
             $promjenaXML->slike->slika[2] = "imgno.jpg";
-            $promjenaXML->asXML($clanakXMLfile);
+            $promjenaXML->asXML($clanakXMLfile);*/
+
+            try {
+              $conn = new PDO("mysql:host=localhost;dbname=wtspirala4", "admin", "pass");
+              // set the PDO error mode to exception
+              $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+              $conn->exec("set names utf8");
+
+              $stmt = $conn->prepare("SELECT * FROM clanak ORDER BY id DESC LIMIT 1");
+              $stmt->execute();
+              $rjesenje = $stmt->fetch(PDO::FETCH_ASSOC);
+
+              $stmt = $conn->prepare("INSERT INTO clanak (naslov, slika1, slika2, slika3, tekst, vrijeme) VALUES (:naslov, :slika1, :slika2, :slika3, :tekst, :vrijeme)");
+              $stmt->bindParam(':naslov', $rjesenje['naslov']);
+              $stmt->bindParam(':slika1', $rjesenje['slika1']);
+              $stmt->bindParam(':slika2', $rjesenje['slika2']);
+              $stmt->bindParam(':slika3', $sl3);
+              $stmt->bindParam(':tekst', $rjesenje['tekst']);
+              $stmt->bindParam(':vrijeme', $vr);
+
+              // insert a row
+              $sl3 = "imgno.jpg";
+              $vr = date("Y-m-d h:i:s");
+              $stmt->execute();
+            }
+            catch(PDOException $e)
+            {
+                echo "Konekcija nije uspjela: " . $e->getMessage();
+            }
           }
         ?>
-      </div>
-    <?php else: ?>
-      <div class="kolona sadrzaj"></div>
-    <?php endif; ?>
-    <div class="kolona margina"></div>
-  </div>
-
-  <div class="red">
+        </div>
+      <?php else: ?>
+    <div class="kolona sadrzaj"></div>
+  <?php endif; ?>
+  <div class="kolona margina"></div>
+</div>
+<div class="red">
     <div class="kolona margina"></div>
     <?php  if(isset($_SESSION['stanje']) && $_SESSION['stanje'] === "mijenjanje"):  ?>
     <div class="kolona sadrzaj">
       <?php
         //echo simplexml_load_file($clanakXMLfile)->naslov;
-        $clanakInfo = simplexml_load_file($clanakXMLfile);
-        echo '<form method="post" action="'.htmlspecialchars($_SERVER["PHP_SELF"]).'"><textarea name="unosOpis" rows="4" style="width:100%">'.htmlspecialchars($clanakInfo->opis).'</textarea>';
-        if (isset($_POST['spasiOpis'])) {
-          $promjenaXML = simplexml_load_file($clanakXMLfile);
-          //echo $_POST['unosNaslov'];
-          $promjenaXML->opis = $_POST['unosOpis'];
-          //echo $promjenaXML->naslov;
-          $promjenaXML->asXML($clanakXMLfile);
-          //echo $promjenaXML->naslov;
-        }
+        try {
+          $conn = new PDO("mysql:host=localhost;dbname=wtspirala4", "admin", "pass");
+          // set the PDO error mode to exception
+          $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+          $conn->exec("set names utf8");
 
-        if (isset($_POST['izbrisiOpis'])) {
-          $promjenaXML = simplexml_load_file($clanakXMLfile);
-          //echo $_POST['unosNaslov'];
-          $promjenaXML->opis = "";
-          //echo $promjenaXML->naslov;
-          $promjenaXML->asXML($clanakXMLfile);
-          //echo $promjenaXML->naslov;
+          $stmt = $conn->prepare("SELECT tekst FROM clanak ORDER BY id DESC LIMIT 1");
+          $stmt->execute();
+          foreach ($stmt->fetch() as $tekst) {
+            //echo $naslov;
+            echo '<form method="post" action="'.htmlspecialchars($_SERVER["PHP_SELF"]).'"><textarea name="unosOpis" rows="4" style="width:100%">'.htmlspecialchars($tekst).'</textarea>';
+            break;
+          }
+          if (isset($_POST['spasiOpis'])) {
+            $conn = new PDO("mysql:host=localhost;dbname=wtspirala4", "admin", "pass");
+            // set the PDO error mode to exception
+            $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            $conn->exec("set names utf8");
+
+            $stmt = $conn->prepare("SELECT * FROM clanak ORDER BY id DESC LIMIT 1");
+            $stmt->execute();
+            $rjesenje = $stmt->fetch(PDO::FETCH_ASSOC);
+
+            $stmt = $conn->prepare("INSERT INTO clanak (naslov, slika1, slika2, slika3, tekst, vrijeme) VALUES (:naslov, :slika1, :slika2, :slika3, :tekst, :vrijeme)");
+            $stmt->bindParam(':naslov', $rjesenje['naslov']);
+            $stmt->bindParam(':slika1', $rjesenje['slika1']);
+            $stmt->bindParam(':slika2', $rjesenje['slika2']);
+            $stmt->bindParam(':slika3', $rjesenje['slika3']);
+            $stmt->bindParam(':tekst', $tekst);
+            $stmt->bindParam(':vrijeme', $vr);
+
+            // insert a row
+            $tekst = $_POST['unosOpis'];
+            $vr = date("Y-m-d h:i:s");
+            $stmt->execute();
+          }
+
+          if (isset($_POST['izbrisiOpis'])) {
+            $conn = new PDO("mysql:host=localhost;dbname=wtspirala4", "admin", "pass");
+            // set the PDO error mode to exception
+            $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            $conn->exec("set names utf8");
+
+            $stmt = $conn->prepare("SELECT * FROM clanak ORDER BY id DESC LIMIT 1");
+            $stmt->execute();
+            $rjesenje = $stmt->fetch(PDO::FETCH_ASSOC);
+
+            $stmt = $conn->prepare("INSERT INTO clanak (naslov, slika1, slika2, slika3, tekst, vrijeme) VALUES (:naslov, :slika1, :slika2, :slika3, :tekst, :vrijeme)");
+            $stmt->bindParam(':naslov', $rjesenje['naslov']);
+            $stmt->bindParam(':slika1', $rjesenje['slika1']);
+            $stmt->bindParam(':slika2', $rjesenje['slika2']);
+            $stmt->bindParam(':slika3', $rjesenje['slika3']);
+            $stmt->bindParam(':tekst', $tekst);
+            $stmt->bindParam(':vrijeme', $vr);
+
+            // insert a row
+            $tekst = "";
+            $vr = date("Y-m-d h:i:s");
+            $stmt->execute();
+          }
+        }
+        catch(PDOException $e)
+        {
+            echo "Konekcija nije uspjela: " . $e->getMessage();
         }
       ?>
 
@@ -457,7 +880,26 @@
     <?php else: ?>
       <div class="kolona sadrzaj">
         <p>
-          <?php echo $clanakInfo->opis ?>
+          <?php
+          try {
+            $conn = new PDO("mysql:host=localhost;dbname=wtspirala4", "admin", "pass");
+            // set the PDO error mode to exception
+            $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            $conn->exec("set names utf8");
+
+            $stmt = $conn->prepare("SELECT tekst FROM clanak ORDER BY id DESC LIMIT 1");
+            $stmt->execute();
+            foreach ($stmt->fetch() as $tekst) {
+            //echo $naslov;
+            echo htmlspecialchars($tekst);
+            break;
+            }
+          }
+          catch(PDOException $e)
+          {
+              echo "Konekcija nije uspjela: " . $e->getMessage();
+          }
+          ?>
         </p>
       </div>
       <div class="kolona margina"></div>
@@ -487,8 +929,53 @@
     </div>
     <div class="kolona margina"></div>
   </div>
+  <div class="red">
+    <div class="kolona margina"></div>
+    <div class="kolona sadrzaj">
+      <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>">
+        <input type="submit" name="preuzmiPDF" value="Generiši PDF">
+      </form>
+    </div>
+    <div class="kolona margina"></div>
+  </div>
+
+  <?php
+      if (isset($_POST['preuzmiPDF'])) {
+        try {
+          $conn = new PDO("mysql:host=localhost;dbname=wtspirala4", "admin", "pass");
+          // set the PDO error mode to exception
+          $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+          $conn->exec("set names utf8");
+
+          $stmt = $conn->prepare("SELECT * FROM clanak ORDER BY id DESC LIMIT 1");
+          $stmt->execute();
+          $rjesenje = $stmt->fetch(PDO::FETCH_ASSOC);
+
+          require('fpdf.php');
+          $pdf = new FPDF();
+          $pdf->AddPage();
+          $pdf->SetFont('Arial','',16);
+          $pdf->SetTitle('WTinfo');
+          //$pdf->Write(5,$clanakInfo->naslov);
+          $pdf->Cell(0,0,$rjesenje['naslov'],0,2,'C');
 
 
+          $pdf->SetFont('Arial','',12);
+          $pdf->Image('../Images/' . $rjesenje['slika1'] .'', 5, 20, 200);
+          $pdf->Image('../Images/' . $rjesenje['slika2'] .'', 5, 150, 200);
+          $pdf->AddPage();
+          $pdf->Image('../Images/' . $rjesenje['slika3'] .'', 5, 10, 200);
+          $pdf->Cell(0,130,"",0,2,'C');
+          $pdf->MultiCell(0,5,$rjesenje['tekst'],0,'L');
+          $pdf->Output('F', 'Clanak.pdf');
+        }
+        catch(PDOException $e)
+        {
+            echo "Konekcija nije uspjela: " . $e->getMessage();
+        }
+
+      }
+    ?>
 
 
   <div id="id01" class="modal">
@@ -496,28 +983,7 @@
   </div>
   <?php echo session_status(); ?>
 
-  <?php
-    if (isset($_POST['preuzmiPDF'])) {
-      $clanakInfo = simplexml_load_file($clanakXMLfile);
-      require('fpdf.php');
-      $pdf = new FPDF();
-      $pdf->AddPage();
-      $pdf->SetFont('Arial','',16);
-      $pdf->SetTitle('WTinfo');
-      //$pdf->Write(5,$clanakInfo->naslov);
-      $pdf->Cell(0,0,$clanakInfo->naslov,0,2,'C');
 
-
-      $pdf->SetFont('Arial','',12);
-      $pdf->Image('../Images/' . $clanakInfo->slike->slika[0] .'', 5, 20, 200);
-      $pdf->Image('../Images/' . $clanakInfo->slike->slika[1] .'', 5, 150, 200);
-      $pdf->AddPage();
-      $pdf->Image('../Images/' . $clanakInfo->slike->slika[2] .'', 5, 10, 200);
-      $pdf->Cell(0,130,"",0,2,'C');
-      $pdf->MultiCell(0,5,$clanakInfo->opis,0,'L');
-      $pdf->Output('F', 'Clanak.pdf');
-    }
-  ?>
 
 
 

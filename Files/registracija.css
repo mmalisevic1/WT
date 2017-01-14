@@ -287,6 +287,10 @@ form {
   margin-top: 10%;
 }
 
+#proradi {
+	margin: 0;
+}
+
 #emailVal {
 	margin: 0;
 }

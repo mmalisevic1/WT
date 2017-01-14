@@ -1,10 +1,55 @@
+<?php
+  session_start();
+
+  if (isset($_SESSION['usernamePrijava'])) {
+    if (isset($_POST['submitFeedback'])) {
+      try {
+        $conn = new PDO("mysql:host=localhost;dbname=wtspirala4", "admin", "pass");
+        // set the PDO error mode to exception
+        $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        $conn->exec("set names utf8");
+
+        $stmt = $conn->prepare("SELECT id FROM clanak ORDER BY id DESC LIMIT 1");
+        $stmt->execute();
+        $idClanak = 0;
+        foreach ($stmt->fetch() as $id) {
+          //echo $naslov;
+          $idClanak = $id;
+          break;
+        }
+
+
+        $conn = null;
+        $conn = new PDO("mysql:host=localhost;dbname=wtspirala4", "admin", "pass");
+        // set the PDO error mode to exception
+        $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        $conn->exec("set names utf8");
+
+        $stmt = $conn->prepare("INSERT INTO komentar (id, clanak, autor, tekst, vrijeme) VALUES (NULL, :clanak, :autor, :tekst, :vrijeme)");
+        $stmt->bindParam(':clanak', $idClanak);
+        $stmt->bindParam(':autor', $_SESSION['usernamePrijava']);
+        $stmt->bindParam(':tekst', $_POST['komentar']);
+        $stmt->bindParam(':vrijeme', $vr);
+
+        // insert a row
+        $vr = date("Y-m-d h:i:s");
+        $stmt->execute();
+      }
+      catch(PDOException $e)
+      {
+          echo "Konekcija nije uspjela: " . $e->getMessage();
+      }
+    }
+  }
+?>
+
 <!DOCTYPE html>
 <html>
 <head>
-  <meta charset="utf-8">
   <title>wtInfo</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="kontakt.css">
+  <meta name="viewport" charset="utf-8" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="feedback.css">
+  <script src="feedback.js"></script>
 </head>
 <header>
   <section class="navigation">
@@ -86,74 +131,35 @@
 </section>
 </header>
 <body>
+  <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" name="formFeedback" id="fFeedback"
+  onsubmit="return validacijaFeedback()" method="post">
   <div class="red">
     <div class="kolona margina"></div>
     <div class="kolona lsadrzaj">
-      <h3>Uredništvo</h3>
+      <label>Ostavite Vaš komentar na članak.<br>Vaše mišljenje nam je bitno.</label>
     </div>
     <div class="kolona dsadrzaj">
-      <p>
-        e-mail: mmalisevic1@etf.unsa.ba<br>
-        telefoni:<br>
-        +387 33 584-745<br>
-        +387 33 333-079
-      </p>
+      <textarea name="komentar" id="komentar" rows="5"></textarea>
     </div>
     <div class="kolona margina"></div>
   </div>
   <div class="red">
     <div class="kolona margina"></div>
     <div class="kolona lsadrzaj">
-      <h3>Oglašavanje</h3>
     </div>
     <div class="kolona dsadrzaj">
-      <p>
-        e-mail: mmalisevic1@etf.unsa.ba<br>
-        telefon:<br>
-        +387 33 554-105
-      </p>
-    </div>
-    <div class="kolona margina"></div>
-  </div>
-  <div class="red">
-    <div class="kolona margina"></div>
-    <div class="kolona lsadrzaj">
-      <h3>Razvojni tim</h3>
-    </div>
-    <div class="kolona dsadrzaj">
-      <p>
-        e-mail: medina.malisevic@gmail.com
-      </p>
-    </div>
-    <div class="kolona margina"></div>
-  </div>
-  <div class="red">
-    <div class="kolona margina"></div>
-    <div class="kolona lsadrzaj">
-      <h3>Adresa</h3>
-    </div>
-    <div class="kolona dsadrzaj">
-      <p>
-        Elektrotehnički fakultet Sarajevo<br>
-        Zmaja od Bosne b.b.<br>
-        71000 Sarajevo<br>
-        Bosna i Hercegovina
-      </p>
+      <p id="komentarVal"></p>
     </div>
     <div class="kolona margina"></div>
   </div>
   <div class="red zadnji">
     <div class="kolona margina"></div>
     <div class="kolona lsadrzaj">
-      <h3>Info</h3>
+      <input type="submit" value="Pošalji" name="submitFeedback">
     </div>
-    <div class="kolona dsadrzaj">
-      <p>
-        telefon:<br>
-        +387 33 854-698
-      </p>
-    </div>
+    <div class="kolona dsadrzaj"></div>
     <div class="kolona margina"></div>
   </div>
+</form>
 </body>
 </html>

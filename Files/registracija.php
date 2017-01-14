@@ -1,22 +1,40 @@
 <?php
   session_start();
-  $registracijaXMLfile = "registracija.xml";
-  $postoji = file_exists($registracijaXMLfile);
-  if($postoji == FALSE){
-    $registracijaInfo = new SimpleXMLElement("<?xml version=\"1.0\" encoding=\"utf-8\" ?><Korisnici>
-</Korisnici>");
-    $registracijaInfo->asXML($registracijaXMLfile);
-   //echo "kreira se file";
+  $novineXMLfile = "novine.xml";
+  $postojiN = file_exists($novineXMLfile);
+  if ($postojiN == FALSE) {
+    $novineInfo = new SimpleXMLElement("<?xml version=\"1.0\" encoding=\"utf-8\" ?><Adrese>
+</Adrese>");
+    $novineInfo->asXML($novineXMLfile);
   }
   else {
-    $registracijaInfo = simplexml_load_file($registracijaXMLfile);
+    $novineInfo = simplexml_load_file($novineXMLfile);
   }
+
   if (isset($_POST['registracijaSubmit'])) {
     //echo "desavanje";
-    $korisnik = $registracijaInfo->addChild('Korisnik');
-    $korisnik->addChild('korisnickoIme', $_POST['korIme']);
-    $korisnik->addChild('spol', $_POST['spol']);
-    $registracijaInfo->asXML($registracijaXMLfile);
+    try {
+      $conn = new PDO("mysql:host=localhost;dbname=wtspirala4", "admin", "pass");
+      // set the PDO error mode to exception
+      $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+      $conn->exec("set names utf8");
+
+      $stmt = $conn->prepare("INSERT INTO korisnik (username, password, email, spol) VALUES (:username, :password, :email, :spol)");
+      $stmt->bindParam(':username', $_POST['korIme']);
+      $stmt->bindParam(':password', $_POST['lozinka']);
+      $stmt->bindParam(':email', $_POST['email']);
+      $stmt->bindParam(':spol', $_POST['spol']);
+
+      // insert a row
+      $stmt->execute();
+    } catch (PDOException $e) {
+      echo "Konekcija nije uspjela: " . $e->getMessage();
+    }
+
+  }
+  if (isset($_POST['adreseSubmit'])) {
+    $novineInfo->addChild('Adresa', $_POST['adresa']);
+    $novineInfo->asXML($novineXMLfile);
   }
 ?>
 
@@ -46,11 +64,15 @@
         if (this.readyState==4 && this.status==200) {
           rezultati = this.responseText;
           var niz = rezultati.split("<br />");
-          for (var i = 0; i < 10; i++) {
+          document.getElementById("livesearch").innerHTML = "";
+          for (var i = 0; i < niz.length; i++) {
             var redak = niz[i] + "<br>";
-            document.getElementById("livesearch").innerHTML+= redak;
-            document.getElementById("livesearch").style.border="1px solid #A5ACB2";
-                }
+            if (i < 10) {
+              document.getElementById("livesearch").innerHTML += redak;
+              document.getElementById("livesearch").style.border="1px solid #A5ACB2";
+            }
+
+          }
         }
       }
       xmlhttp.open("GET","livesearch.php?q="+str,true);
@@ -117,12 +139,12 @@
         </li>
         <li>
           <div class="kocka biznis"></div>
-          <a href="prijava.html">Prijava</a>
+          <a href="prijava.php">Prijava</a>
         </li>
         <li>
           <div>
             <div class="kocka vise"></div>
-            <a href="feedback.html">Feedback</a>
+            <a href="feedback.php">Feedback</a>
           </div>
 
           <ul class="nav-dropdown">
@@ -250,6 +272,44 @@
     <div class="kolona margina"></div>
     <div class="kolona lsadrzaj">
       <input type="submit" name="csvButton" value="Preuzmi CSV">
+    </div>
+    <div class="kolona dsadrzaj"></div>
+    <div class="kolona margina"></div>
+  </div>
+</form>
+<?php endif; ?>
+<form name="formAdrese" id="fAdrese" onsubmit="return adreseValidacija()" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>"
+   method="post">
+   <div class="red zadnji">
+     <div class="kolona margina"></div>
+     <div class="kolona lsadrzaj">
+       <label style="color: #66ccff;">Prijavite se za naše novine</label>
+
+     </div>
+     <div class="kolona dsadrzaj">
+       <input type="text" name="adresa" id="adresa">
+
+     </div>
+     <div class="kolona validacija">
+       <p style="margin:0" id="proradi"></p>
+     </div>
+     <div class="kolona margina"></div>
+   </div>
+   <div class="red zadnji">
+     <div class="kolona margina"></div>
+     <div class="kolona lsadrzaj">
+       <input type="submit" name="adreseSubmit" value="Prijavi se">
+     </div>
+     <div class="kolona dsadrzaj"></div>
+     <div class="kolona margina"></div>
+   </div>
+</form>
+<?php if(isset($_SESSION['stanje']) && $_SESSION['stanje'] === "mijenjanje"): ?>
+<form action="novine.php" method="post">
+  <div class="red zadnji">
+    <div class="kolona margina"></div>
+    <div class="kolona lsadrzaj">
+      <input type="submit" name="novineButton" value="Pošalji u BP">
     </div>
     <div class="kolona dsadrzaj"></div>
     <div class="kolona margina"></div>

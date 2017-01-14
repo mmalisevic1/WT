@@ -1,3 +1,19 @@
+function adreseValidacija()
+{
+  //alert("false");
+  var emailNVal = document.getElementById('proradi');
+  emailNVal.innerHTML = "";
+  var formNovine = document.getElementById('fAdrese');
+  var emailRegExp = /^[-a-z0-9~!$%^&*_=+}{\'?]+(\.[-a-z0-9~!$%^&*_=+}{\'?]+)*@([a-z0-9_][-a-z0-9_]*(\.[-a-z0-9_]+)*\.(aero|arpa|biz|com|coop|edu|gov|info|int|mil|museum|name|net|org|pro|travel|mobi|[a-z][a-z])|([0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}))(:[0-9]{1,5})?$/i;
+  if(!emailRegExp.test(formNovine['adresa'].value))
+  {
+    emailNVal.innerHTML += "Pogrešno unesen email";
+    document.getElementById('adresa').focus();
+
+    return false;
+  }
+}
+
 function validacijaRegistracija()
 {
   var emailVal = document.getElementById('emailVal');
@@ -76,6 +92,8 @@ function validacijaRegistracija()
     alert("Napomena: Vaš pretraživač ne podržava Web Storage");
   }
 }
+
+
 
 window.onload = function() {
   // Vrati podatke
